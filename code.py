@@ -45,3 +45,43 @@ class EPetition:
         self.signatures[petition_id].add(signer.id)
         self.petitions[petition_id]["signature_count"] += 1
         print("Petition successfully signed.")
+
+    def get_signatures(self, petition_id):
+        # Display all signature IDs for a given petition
+        if petition_id not in self.petitions:
+            print("Invalid petition ID.")
+            return
+        print("Signatures' IDs:")
+        for signature_id in self.signatures[petition_id]:
+            print(signature_id)
+
+def create_account(accounts):
+    # Function to create a new account
+    full_name = input("Your Full Name: ")
+    id_number = input("Your ID Number: ")
+    password = input("Your Password: ")
+    if id_number in accounts:
+        print("An account already exists with this ID number.")
+        return None
+    new_account = DigitalIdentity(full_name, id_number, password)
+    accounts[id_number] = new_account
+    print("Account successfully created.")
+    return new_account
+
+def login(accounts):
+    # Function for account login
+    id_number = input("Your ID Number: ")
+    password = input("Your Password: ")
+    if id_number in accounts and hashlib.sha256(password.encode()).hexdigest() == accounts[id_number].password:
+        print("Login successful.")
+        return accounts[id_number]
+    else:
+        print("Account not found or incorrect password.")
+        return None
+
+def main_menu():
+    # Display the main menu
+    print("\nMain Menu:")
+    print("1. Create Account")
+    print("2. Login")
+    print("3. Exit")
