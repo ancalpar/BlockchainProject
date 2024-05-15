@@ -85,3 +85,77 @@ def main_menu():
     print("1. Create Account")
     print("2. Login")
     print("3. Exit")
+
+def petition_menu(ep, account):
+    # Menu for petition-related actions
+    while True:
+        print("\nPetition Menu:")
+        print("1. Create Petition")
+        print("2. View Petitions")
+        print("3. Return to Main Menu")
+        choice = input("Make your selection: ")
+
+        if choice == "1":
+            title = input("Petition Title: ")
+            description = input("Petition Description: ")
+            ep.create_petition(title, description, account)
+
+        elif choice == "2":
+            petition_ids = ep.list_petitions()
+            if petition_ids:
+                index = int(input("Enter the number of the petition you want to select: ")) - 1
+                if 0 <= index < len(petition_ids):
+                    sub_menu(ep, account, petition_ids[index])
+
+        elif choice == "3":
+            break
+
+        else:
+            print("Invalid selection. Please try again.")
+
+def sub_menu(ep, account, petition_id):
+    # Sub-menu for selected petition actions
+    while True:
+        print("\nPetition Actions Menu:")
+        print("1. Sign Petition")
+        print("2. View Signatures")
+        print("3. Return")
+        choice = input("Make your selection: ")
+
+        if choice == "1":
+            ep.sign_petition(petition_id, account)
+
+        elif choice == "2":
+            ep.get_signatures(petition_id)
+
+        elif choice == "3":
+            break
+
+        else:
+            print("Invalid selection. Please try again.")
+
+def main():
+    ep = EPetition()
+    accounts = {}
+    account = None
+    while True:
+        main_menu()
+        choice = input("Make your selection: ")
+
+        if choice == "1":
+            account = create_account(accounts)
+
+        elif choice == "2":
+            account = login(accounts)
+            if account:
+                petition_menu(ep, account)
+
+        elif choice == "3":
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid selection. Please try again.")
+
+if __name__ == "__main__":
+    main()
